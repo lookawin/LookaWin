@@ -369,7 +369,7 @@ function App() {
           </div>
           <div className="ref-row">
             <input readOnly className="ref-input" value={`${typeof window!=="undefined"?window.location.origin:"https://looka.win"}?ref=${address||"YOUR_ADDRESS"}`}/>
-            <button className="btn-copy" onClick={copyReferral}>{copied?"&#10003;":t("referral_copy")}</button>
+            <button className="btn-copy" onClick={copyReferral}>{copied?(lang==="fr"?"Copié":"Copied"):t("referral_copy")}</button>
           </div>
         </div>
 
