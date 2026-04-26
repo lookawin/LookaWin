@@ -327,7 +327,7 @@ function App() {
                   <a href={`https://bscscan.com/tx/${tk.txHash}`} target="_blank" rel="noopener noreferrer"
                     style={{fontSize:"0.7rem",color:"var(--purple)",textDecoration:"none",display:"flex",alignItems:"center",gap:4}}>
                     <i className="fa-solid fa-arrow-up-right-from-square" style={{fontSize:"0.6rem"}}></i>
-                    {lang==="fr"?"Voir sur BscScan":"View on BscScan"}
+                    0x{tk.txHash.slice(2,10)}&hellip;{tk.txHash.slice(-6)}
                   </a>
                 )}
               </div>
