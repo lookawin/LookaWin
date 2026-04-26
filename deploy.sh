@@ -10,7 +10,7 @@ for root, dirs, filenames in os.walk(OUT_DIR):
         filepath = os.path.join(root, filename)
         relative = os.path.relpath(filepath, OUT_DIR)
         files.append(("file", (f"lookawin/{relative}", open(filepath, "rb"), "application/octet-stream")))
-response = requests.post(
+response = requests.post("https://api.pinata.cloud/pinning/pinFileToIPFS",
 
     headers=headers, files=files,
 
