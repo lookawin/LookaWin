@@ -320,10 +320,10 @@ function App() {
                     {tk.txHash
                       ? <a href={`https://bscscan.com/tx/${tk.txHash}`} target="_blank" rel="noopener noreferrer"
                           className="ticket-id" style={{textDecoration:"none",display:"flex",alignItems:"center",gap:4}}>
-                          {tk.id||"—"}0x{tk.id||"—"}hellip;
+                          {tk.id||"—"}
                           <i className="fa-solid fa-arrow-up-right-from-square" style={{fontSize:"0.6rem",opacity:0.6}}></i>
                         </a>
-                      : <p className="ticket-id">{tk.id||"—"}0x{tk.id||"—"}hellip;</p>
+                      : <p className="ticket-id">{tk.id||"—"}</p>
                     }
                   </div>
                   <span className={`ticket-status-${tk.status||"active"}`}>
