@@ -289,8 +289,16 @@ function App() {
         </div>
 
         <div className="card a4">
-          <p className="card-label">{lang==="fr"?"Mes Tickets":"My Tickets"}</p>
-          {!isConnected ? (
+          <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
+          <div className="tabs">
+            <button className={`tab ${activeTab==="mytickets"?"tab-on":"tab-off"}`} onClick={()=>setActiveTab("mytickets")}>
+              {lang==="fr"?"Mes Tickets":"My Tickets"}
+            </button>
+            <button className={`tab ${activeTab==="winners"?"tab-on":"tab-off"}`} onClick={()=>setActiveTab("winners")}>
+              {lang==="fr"?"Derniers Gagnants":"Latest Winners"}
+            </button>
+          </div>
+          {activeTab==="mytickets" && (!isConnected ? (
             <div style={{textAlign:"center",padding:"18px 0"}}>
               <i className="fa-solid fa-wallet" style={{color:"#b48eef",fontSize:"1.9rem",marginBottom:"10px",display:"block"}}></i>
               <p style={{color:"var(--muted)",fontSize:"0.85rem",marginBottom:"12px"}}>
@@ -332,9 +340,27 @@ function App() {
                 </div>
               </div>
             ))
-          )}
+          ))}
+          {activeTab==="winners" && (winners.length===0 ? (
+            <div style={{textAlign:"center",padding:"28px 0"}}>
+              <i className="fa-solid fa-trophy" style={{color:"#b48eef",fontSize:"1.9rem"}}></i>
+              <p style={{color:"var(--muted)",fontSize:"0.85rem",marginTop:8}}>{t("no_winners")}</p>
+            </div>
+          ) : (
+            winners.map((w,i)=>(
+              <div key={i} className="winner-item">
+                <div>
+                  <p className="winner-round">{t("round")} #{w.round}</p>
+                  <p className="winner-addr">{w.address.slice(0,6)}...{w.address.slice(-4)}</p>
+                </div>
+                <div>
+                  <p className="winner-amt">+${w.amount}</p>
+                  <p className="winner-unit">USDT</p>
+                </div>
+              </div>
+            ))
+          ))}
         </div>
-
         <div className="card a5">
           <div className="ref-header">
             <p className="card-label" style={{marginBottom:0}}>{t("referral_link")}</p>
