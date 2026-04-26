@@ -10,7 +10,7 @@
 }
 html, body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-y: auto; }
 .app-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 16px; height: 58px; display: flex; align-items: center; justify-content: space-between; }
-.logo { display: flex; align-items: center; gap: 2px; text-decoration: none; }
+.logo { display: flex; align-items: center; gap: 0; text-decoration: none; }
 .logo-icon { width: 33px; height: 33px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 .logo-text { font-family: var(--font); font-weight: 800; font-size: 1.2rem; color: var(--gold); }
 .header-actions { display: flex; gap: 7px; align-items: center; }

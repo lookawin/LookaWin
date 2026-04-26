@@ -140,7 +140,7 @@ export default function Protocole() {
         <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
       </Head>
       <header className="app-header">
-        <a href="/" className="logo"><div className="logo-icon">🎰</div><span className="logo-text">LookaWin</span></a>
+        <a href="/" className="logo"><div className="logo-icon"><i className="fa-solid fa-ticket" style={{color:"#b48eef",fontSize:"0.9rem"}}></i></div><span className="logo-text">LookaWin</span></a>
         <div className="header-actions">
           <button className="btn-lang" onClick={toggleLang}>{lang==="en"?"FR":"EN"}</button>
         </div>
