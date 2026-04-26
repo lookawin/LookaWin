@@ -1,3 +1,3 @@
 import dynamic from "next/dynamic";
-const Home = dynamic(() => import("./index_app"), { ssr: false });
+const Home = dynamic(() => import("../components/App"), { ssr: false });
 export default Home;
