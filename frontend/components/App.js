@@ -317,19 +317,19 @@ function App() {
                     <p className="ticket-round" style={{marginBottom:2}}>
                       {lang==="fr"?"Bloc":"Block"} #{tk.block||"—"} &bull; {tk.quantity||1} ticket{tk.quantity>1?"s":""}
                     </p>
-                    <p className="ticket-id">0x{tk.id||"—"}&hellip;</p>
+                    {tk.txHash
+                      ? <a href={`https://bscscan.com/tx/${tk.txHash}`} target="_blank" rel="noopener noreferrer"
+                          className="ticket-id" style={{textDecoration:"none",display:"flex",alignItems:"center",gap:4}}>
+                          0x{tk.id||"—"}&hellip;
+                          <i className="fa-solid fa-arrow-up-right-from-square" style={{fontSize:"0.6rem",opacity:0.6}}></i>
+                        </a>
+                      : <p className="ticket-id">0x{tk.id||"—"}&hellip;</p>
+                    }
                   </div>
                   <span className={`ticket-status-${tk.status||"active"}`}>
                     {tk.status==="won"?(lang==="fr"?"Gagné 🎉":"Won 🎉"):tk.status==="lost"?(lang==="fr"?"Terminé":"Ended"):(lang==="fr"?"Actif":"Active")}
                   </span>
                 </div>
-                {tk.txHash && (
-                  <a href={`https://bscscan.com/tx/${tk.txHash}`} target="_blank" rel="noopener noreferrer"
-                    style={{fontSize:"0.7rem",color:"var(--purple)",textDecoration:"none",display:"flex",alignItems:"center",gap:4}}>
-                    <i className="fa-solid fa-arrow-up-right-from-square" style={{fontSize:"0.6rem"}}></i>
-                    0x{tk.txHash.slice(2,10)}&hellip;{tk.txHash.slice(-6)}
-                  </a>
-                )}
               </div>
             ))
           )}
