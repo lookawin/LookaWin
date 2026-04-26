@@ -35,7 +35,7 @@ function App() {
   const [quantity, setQuantity]   = useState(1);
   const [copied, setCopied]       = useState(false);
   const [countdown, setCountdown] = useState({ m: "00", s: "00" });
-  const [activeTab, setActiveTab] = useState("hourly");
+  const [activeTab, setActiveTab] = useState("winners");
   const [myTickets, setMyTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(false);
   const [loading, setLoading]     = useState(false);
@@ -291,14 +291,14 @@ function App() {
         <div className="card a4">
           <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
           <div className="tabs">
-            <button className={`tab ${activeTab==="mytickets"?"tab-on":"tab-off"}`} onClick={()=>setActiveTab("mytickets")}>
-              {lang==="fr"?"Mes Tickets":"My Tickets"}
-            </button>
-            <button className={`tab ${activeTab==="winners"?"tab-on":"tab-off"}`} onClick={()=>setActiveTab("winners")}>
+            <button className={`tab ${historyTab==="winners"?"tab-on":"tab-off"}`} onClick={()=>setHistoryTab("winners")}>
               {lang==="fr"?"Derniers Gagnants":"Latest Winners"}
             </button>
+            <button className={`tab ${historyTab==="mytickets"?"tab-on":"tab-off"}`} onClick={()=>setHistoryTab("mytickets")}>
+              {lang==="fr"?"Mes Tickets":"My Tickets"}
+            </button>
           </div>
-          {activeTab==="mytickets" && (!isConnected ? (
+          {historyTab==="mytickets" && (!isConnected ? (
             <div style={{textAlign:"center",padding:"18px 0"}}>
               <i className="fa-solid fa-wallet" style={{color:"#b48eef",fontSize:"1.9rem",marginBottom:"10px",display:"block"}}></i>
               <p style={{color:"var(--muted)",fontSize:"0.85rem",marginBottom:"12px"}}>
@@ -341,7 +341,7 @@ function App() {
               </div>
             ))
           ))}
-          {activeTab==="winners" && (winners.length===0 ? (
+          {historyTab==="winners" && (winners.length===0 ? (
             <div style={{textAlign:"center",padding:"28px 0"}}>
               <i className="fa-solid fa-trophy" style={{color:"#b48eef",fontSize:"1.9rem"}}></i>
               <p style={{color:"var(--muted)",fontSize:"0.85rem",marginTop:8}}>{t("no_winners")}</p>
