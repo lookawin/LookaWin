@@ -70,7 +70,7 @@ function App() {
     if (!address) return;
     setLoadingTickets(true);
     try {
-      const r = await fetch(`${API_URL}/api/tickets/${address}?lang=${lang}`);
+      const r = await fetch(`${API_URL}/api/tickets?addr=${address}&lang=${lang}`);
       const d = await r.json();
       setMyTickets(d.tickets||[]);
     } catch { setMyTickets([]); }

@@ -42,10 +42,10 @@ const LOTTERY_ABI = [
   "function requestWeeklyDraw() external",
   "function requestMonthlyDraw() external",
   "function getCurrentTicketCount() view returns (uint256)",
-  "function getCurrentPrize() view returns (uint256)",
+  "function getCurrentHourlyPrize() view returns (uint256)",
   "function getJackpots() view returns (uint256, uint256, uint256)",
-  "function minParticipants() view returns (uint256)",
-  "function houseBalance() view returns (uint256)",
+  "function MIN_PARTICIPANTS() view returns (uint256)",
+  "function protocolBalance() view returns (uint256)",
   "function updateParams(uint256, uint256) external",
   "function withdrawHouse(address, uint256) external",
   "event TicketPurchased(address indexed buyer, uint256 quantity, address indexed referrer)",
@@ -85,7 +85,7 @@ cron.schedule("0 * * * *", async () => {
   if (!lottery) return;
   try {
     const count = await lottery.getCurrentTicketCount();
-    const min   = await lottery.minParticipants();
+    const min   = await lottery.MIN_PARTICIPANTS();
     addLog(`[HOURLY] Tickets: ${count} / Min: ${min}`);
     if (count >= min) {
       const tx = await lottery.requestHourlyDraw();
@@ -146,10 +146,10 @@ app.get("/api/state", async (req, res) => {
     if (!lottery) return res.json({ error: "Contract not configured" });
     const [count, prize, jackpots, min, house] = await Promise.all([
       lottery.getCurrentTicketCount(),
-      lottery.getCurrentPrize(),
+      lottery.getCurrentHourlyPrize(),
       lottery.getJackpots(),
-      lottery.minParticipants(),
-      lottery.houseBalance()
+      lottery.MIN_PARTICIPANTS(),
+      lottery.protocolBalance()
     ]);
     res.json({
       labels: {
@@ -162,12 +162,12 @@ app.get("/api/state", async (req, res) => {
       },
       data: {
         tickets:         count.toString(),
-        prize:           (Number(prize) / 1e6).toFixed(2),
-        jackpot_daily:   (Number(jackpots[0]) / 1e6).toFixed(2),
-        jackpot_weekly:  (Number(jackpots[1]) / 1e6).toFixed(2),
-        jackpot_monthly: (Number(jackpots[2]) / 1e6).toFixed(2),
+        prize:           (Number(prize) / 1e18).toFixed(2),
+        jackpot_daily:   (Number(jackpots[0]) / 1e18).toFixed(2),
+        jackpot_weekly:  (Number(jackpots[1]) / 1e18).toFixed(2),
+        jackpot_monthly: (Number(jackpots[2]) / 1e18).toFixed(2),
         min_participants: min.toString(),
-        house_balance:   (Number(house) / 1e6).toFixed(2)
+        house_balance:   (Number(house) / 1e18).toFixed(2)
       }
     });
   } catch (e) {
