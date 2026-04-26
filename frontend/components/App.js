@@ -35,7 +35,8 @@ function App() {
   const [quantity, setQuantity]   = useState(1);
   const [copied, setCopied]       = useState(false);
   const [countdown, setCountdown] = useState({ m: "00", s: "00" });
-  const [activeTab, setActiveTab] = useState("winners");
+  const [activeTab, setActiveTab] = useState("hourly");
+  const [historyTab, setHistoryTab] = useState("winners");
   const [myTickets, setMyTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(false);
   const [loading, setLoading]     = useState(false);
