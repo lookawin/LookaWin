@@ -373,9 +373,9 @@ function App() {
 
       <footer className="footer">
         <div className="footer-links">
-          <a href="/transparence" className="footer-link">{lang==="fr"?"Transparence":"Transparency"}</a>
-          <a href="/anonymat" className="footer-link">{lang==="fr"?"Anonymat":"Anonymity"}</a>
-          <a href="/protocole" className="footer-link">{lang==="fr"?"Protocole":"Protocol"}</a>
+          <a href="/transparence/" className="footer-link">{lang==="fr"?"Transparence":"Transparency"}</a>
+          <a href="/anonymat/" className="footer-link">{lang==="fr"?"Anonymat":"Anonymity"}</a>
+          <a href="/protocole/" className="footer-link">{lang==="fr"?"Protocole":"Protocol"}</a>
         </div>
         <p className="footer-copy">&#169; 2026 lookaWin &#8212; Provably Fair Crypto Lottery</p>
       </footer>
