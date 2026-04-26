@@ -297,7 +297,15 @@ app.get("/api/tickets", (req, res) => {
   const tickets = addr
     ? eventsCache.tickets.filter(t => t.buyer.toLowerCase() === addr).slice(-50).reverse()
     : eventsCache.tickets.slice(-50).reverse();
-  res.json({ tickets });
+  const lang = req.query.lang || "en";
+  const enriched = tickets.map((t, i) => ({
+    id: t.txHash ? t.txHash.slice(0,8) : `#${i}`,
+    txHash: t.txHash,
+    quantity: t.quantity || 1,
+    block: t.block,
+    status: "active"
+  }));
+  res.json({ tickets: enriched });
 });
 
 

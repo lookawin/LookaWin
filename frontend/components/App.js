@@ -311,14 +311,25 @@ function App() {
             </div>
           ) : (
             myTickets.map((tk,i)=>(
-              <div key={i} className="ticket-item">
-                <div>
-                  <p className="ticket-round">Round #{tk.round}</p>
-                  <p className="ticket-id">#{tk.id}</p>
+              <div key={i} className="ticket-item" style={{flexDirection:"column",alignItems:"flex-start",gap:6}}>
+                <div style={{display:"flex",justifyContent:"space-between",width:"100%",alignItems:"center"}}>
+                  <div>
+                    <p className="ticket-round" style={{marginBottom:2}}>
+                      {lang==="fr"?"Bloc":"Block"} #{tk.block||"—"} &bull; {tk.quantity||1} ticket{tk.quantity>1?"s":""}
+                    </p>
+                    <p className="ticket-id">0x{tk.id||"—"}&hellip;</p>
+                  </div>
+                  <span className={`ticket-status-${tk.status||"active"}`}>
+                    {tk.status==="won"?(lang==="fr"?"Gagné 🎉":"Won 🎉"):tk.status==="lost"?(lang==="fr"?"Terminé":"Ended"):(lang==="fr"?"Actif":"Active")}
+                  </span>
                 </div>
-                <span className={`ticket-status-${tk.status||"active"}`}>
-                  {tk.status==="won"?(lang==="fr"?"Gagn&#233; &#127881;":"Won &#127881;"):tk.status==="lost"?(lang==="fr"?"Termin&#233;":"Ended"):(lang==="fr"?"Actif":"Active")}
-                </span>
+                {tk.txHash && (
+                  <a href={`https://bscscan.com/tx/${tk.txHash}`} target="_blank" rel="noopener noreferrer"
+                    style={{fontSize:"0.7rem",color:"var(--purple)",textDecoration:"none",display:"flex",alignItems:"center",gap:4}}>
+                    <i className="fa-solid fa-arrow-up-right-from-square" style={{fontSize:"0.6rem"}}></i>
+                    {lang==="fr"?"Voir sur BscScan":"View on BscScan"}
+                  </a>
+                )}
               </div>
             ))
           )}
