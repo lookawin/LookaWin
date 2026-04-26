@@ -1,0 +1,59 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #181a20; --surface: #33333f; --surface2: #26262f; --surface3: #2c2c38;
+  --border: #33333f; --border2: #3e3e4c; --text: #eaecef; --muted: #b7bdc6;
+  --subtle: #707a8a; --gold: #f3ba2f; --gold2: #e0b000;
+  --gold-dim: rgba(243,186,47,0.10); --gold-glow: rgba(243,186,47,0.15);
+  --purple: #b48eef; --purple2: #9b6fe0; --purple-dim: rgba(180,142,239,0.30);
+  --green: #3fd68a; --radius: 22px; --font: 'Baloo 2', sans-serif;
+}
+html, body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-y: auto; }
+.app-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 16px; height: 58px; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.logo-icon { width: 33px; height: 33px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+.logo-text { font-family: var(--font); font-weight: 800; font-size: 1.2rem; color: var(--gold); }
+.header-actions { display: flex; gap: 7px; align-items: center; }
+.btn-lang { height: 33px; padding: 0 14px; background: var(--purple-dim); border: 1px solid rgba(180,142,239,0.25); border-radius: 99px; color: var(--purple); font-family: var(--font); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.btn-lang:hover { background: rgba(180,142,239,0.2); border-color: var(--purple); }
+.footer { border-top: 1px solid var(--border); padding: 20px 16px; text-align: center; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 10px; }
+.footer-link { color: var(--muted); font-size: 0.8rem; text-decoration: none; }
+.footer-link:hover { color: var(--purple); }
+.footer-copy { color: var(--subtle); font-size: 0.7rem; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; }
+.card-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.a1 { animation: fadeUp 0.45s ease both; }
+.a2 { animation: fadeUp 0.45s 0.07s ease both; }
+.a3 { animation: fadeUp 0.45s 0.14s ease both; }
+.card a { color: var(--purple); }
+.card details { margin-bottom: 12px; }
+.card summary { padding: 10px; background: var(--surface2); border-radius: 10px; }
+
+/* ══════════════════════════════════════════
+   THÈME CLAIR — détection automatique OS
+   ══════════════════════════════════════════ */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:          #f2f1fb;
+    --surface:     #ffffff;
+    --surface2:    #e8e6f8;
+    --surface3:    #ededf7;
+    --border:      #dddaf5;
+    --border2:     #ccc9ee;
+    --text:        #13131a;
+    --muted:       #5a5a7a;
+    --subtle:      #8888aa;
+    --purple:      #6c3fcf;
+    --purple2:     #5530b0;
+    --purple-dim:  rgba(108,63,207,0.12);
+    --green:       #1aaa60;
+    color-scheme:  light;
+  }
+  .app-header     { box-shadow: 0 1px 0 var(--border); }
+  .card           { box-shadow: 0 2px 14px rgba(108,63,207,0.07); }
+  .card summary   { background: var(--surface2); }
+  .btn-lang       { background: var(--purple-dim); border-color: rgba(108,63,207,0.25); }
+  .btn-lang:hover { background: rgba(108,63,207,0.20); border-color: var(--purple); }
+}
