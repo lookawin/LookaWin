@@ -49,9 +49,17 @@ export const modal = createAppKit({
     email: false,
     socials: false,
   },
-  themeMode: "dark",
+  themeMode: (typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light",
   themeVariables: {
     "--w3m-accent": "#b48eef",
     "--w3m-border-radius-master": "22px",
   },
 });
+
+// Synchroniser le modal WalletConnect avec le thème OS
+if (typeof window !== "undefined") {
+  window.matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      modal.setThemeMode(e.matches ? "dark" : "light");
+    });
+}
