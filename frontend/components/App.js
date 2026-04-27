@@ -297,19 +297,6 @@ function App() {
             {loading ? (lang==="fr"?"Transaction...":"Processing...") : (quantity===1?t("buy_ticket"):t("buy_tickets").replace("{{n}}",quantity))}
           </button>
         </div>
-
-        <div className="card" style={{marginBottom:14}}>
-          <p className="card-label">{isConnected ? (lang==="fr"?"Mes statistiques":"My stats") : (lang==="fr"?"Statistiques globales":"Global stats")}</p>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-            {[{icon:"🎫",val:isConnected?(state?.user?.tickets??0):(state?.data?.total_tickets??0),label:lang==="fr"?"Tickets achetés":"Tickets bought"},{icon:"💸",val:isConnected?(state?.user?.gains??"0 USDT"):(state?.data?.total_distributed??"0 USDT"),label:lang==="fr"?"Montant distribué":"Distributed"},{icon:"👥",val:isConnected?(state?.user?.referred??0):(state?.data?.total_referred??0),label:lang==="fr"?"Comptes parrainés":"Referred"},{icon:"🔗",val:isConnected?(state?.user?.ref_gains??"0 USDT"):(state?.data?.total_ref_gains??"0 USDT"),label:lang==="fr"?"Gains parrainage":"Ref gains"}].map((s,i)=>(
-              <div key={i} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:22,padding:"16px 14px",display:"flex",flexDirection:"column",gap:5}}>
-                <span style={{fontSize:18}}>{s.icon}</span>
-                <div style={{fontFamily:"var(--font)",fontWeight:800,fontSize:"1.25rem",color:"var(--gold)",lineHeight:1}}>{s.val}</div>
-                <div style={{fontSize:"0.75rem",color:"var(--muted)",fontWeight:600}}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
         <div className="card a4">
           <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
           <div className="tabs">

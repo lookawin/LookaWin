@@ -167,7 +167,11 @@ app.get("/api/state", async (req, res) => {
         jackpot_weekly:  (Number(jackpots[1]) / 1e18).toFixed(2),
         jackpot_monthly: (Number(jackpots[2]) / 1e18).toFixed(2),
         min_participants: min.toString(),
-        house_balance:   (Number(house) / 1e18).toFixed(2)
+        house_balance:     (Number(house) / 1e18).toFixed(2),
+        total_tickets:     eventsCache.tickets.reduce((s,t) => s + (t.quantity||1), 0),
+        total_distributed: (eventsCache.winners.reduce((s,w) => s + Number(BigInt(w.amount)), 0) / 1e18).toFixed(2) + " USDT",
+        total_referred:    new Set(eventsCache.refPayments.map(r => r.referrer.toLowerCase())).size,
+        total_ref_gains:   (eventsCache.refPayments.reduce((s,r) => s + Number(BigInt(r.amount)), 0) / 1e18).toFixed(2) + " USDT"
       }
     });
   } catch (e) {
@@ -240,7 +244,7 @@ app.get("/api/admin/logs", adminAuth, (req, res) => {
 // Cache local events
 const fs = require("fs");
 const CACHE_FILE = "/root/looka/backend/events_cache.json";
-let eventsCache = { lastBlock: 44000000, tickets: [], winners: [] };
+let eventsCache = { lastBlock: 44000000, tickets: [], winners: [], refPayments: [] };
 if (fs.existsSync(CACHE_FILE)) {
   try { eventsCache = JSON.parse(fs.readFileSync(CACHE_FILE)); } catch(_) {}
 }
@@ -251,7 +255,7 @@ async function syncEvents() {
     const provider = lottery.runner.provider;
     const latest = await provider.getBlockNumber();
     const from = eventsCache.lastBlock + 1;
-    const to = Math.min(latest, from + 1000);
+    const to = Math.min(latest, from + 5000);
     if (from > latest) return;
     const buyFilter = lottery.filters.TicketPurchased();
     const winFilter = lottery.filters.WinnerPaid();
@@ -260,6 +264,7 @@ async function syncEvents() {
     const winEvents = await lottery.queryFilter(winFilter, from, to);
     buyEvents.forEach(e => eventsCache.tickets.push({
       buyer: e.args[0], quantity: Number(e.args[1]),
+      referrer: e.args[2],
       block: e.blockNumber, txHash: e.transactionHash
     }));
     winEvents.forEach(e => eventsCache.winners.push({
@@ -267,6 +272,11 @@ async function syncEvents() {
       drawType: Number(e.args[2]), roundId: Number(e.args[3]),
       block: e.blockNumber, txHash: e.transactionHash
     }));
+    await new Promise(r => setTimeout(r, 500));
+    const refFilter = lottery.filters.ReferralPaid();
+    const refEvents = await lottery.queryFilter(refFilter, from, to);
+    (refEvents || []).forEach(e => eventsCache.refPayments.push({ referrer: e.args[0], amount: e.args[1].toString(), block: e.blockNumber }));
+    if (eventsCache.refPayments.length > 2000) eventsCache.refPayments = eventsCache.refPayments.slice(-2000);
     eventsCache.lastBlock = to;
     if (eventsCache.tickets.length > 1000) eventsCache.tickets = eventsCache.tickets.slice(-1000);
     if (eventsCache.winners.length > 500) eventsCache.winners = eventsCache.winners.slice(-500);
@@ -329,15 +339,7 @@ function savePage(slug, data) {
 app.get("/api/pages", (req, res) => {
   const lang = req.query.lang || "en";
   const files = fs.readdirSync(PAGES_DIR).filter(f => f.endsWith(".json"));
-  const pages = files.map(f => JSON.parse(fs.readFileSync(path.join(PAGES_DIR, f), "utf8"))).filter(data => data.published === true).map(data => ({slug: data.slug, published: data.published, title: data[lang]?.title || data["en"]?.title}));res.json({ pages }); // REPLACED
-const pages_old = files.map(f => {
-    const data = JSON.parse(fs.readFileSync(path.join(PAGES_DIR, f), "utf8"));
-    return {
-      slug:      data.slug,
-      published: data.published,
-      title:     data[lang]?.title || data["en"]?.title
-    };
-  });
+  const pages = files.map(f => JSON.parse(fs.readFileSync(path.join(PAGES_DIR, f), "utf8"))).filter(data => data.published === true).map(data => ({slug: data.slug, published: data.published, title: data[lang]?.title || data["en"]?.title}));
   res.json({ pages });
 });
 
@@ -399,6 +401,21 @@ app.delete("/api/admin/pages/:slug", adminAuth, (req, res) => {
   addLog(`[ADMIN] Page supprimée: ${req.params.slug}`);
   res.json({ success: true });
 });
+// Stats personnelles
+app.get("/api/user/:addr", (req, res) => {
+  const addr = req.params.addr.toLowerCase();
+  const myTickets  = eventsCache.tickets.filter(t => t.buyer.toLowerCase() === addr);
+  const myWins     = eventsCache.winners.filter(w => w.winner.toLowerCase() === addr);
+  const myRefs     = eventsCache.refPayments.filter(r => r.referrer.toLowerCase() === addr);
+  const myReferred = new Set(eventsCache.tickets.filter(t => t.referrer && t.referrer.toLowerCase() === addr).map(t => t.buyer.toLowerCase())).size;
+  res.json({
+    tickets:   myTickets.reduce((s,t) => s + (t.quantity||1), 0),
+    gains:     (myWins.reduce((s,w) => s + Number(BigInt(w.amount)), 0) / 1e18).toFixed(2) + " USDT",
+    referred:  myReferred,
+    ref_gains: (myRefs.reduce((s,r) => s + Number(BigInt(r.amount)), 0) / 1e18).toFixed(2) + " USDT"
+  });
+});
+
 // ─────────────────────────────────────────────
 // START
 // ─────────────────────────────────────────────
