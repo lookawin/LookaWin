@@ -5,7 +5,7 @@ import en from "../locales/en.json";
 import { useAppKit, useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
 import { WagmiProvider } from "wagmi";
 import { BrowserProvider, Contract, parseUnits } from "ethers";
-import { wagmiAdapter } from "../walletconfig";
+import { wagmiAdapter, modal } from "../walletconfig";
 import { createAppKit } from "@reown/appkit/react";
 import { LOOKA_ADDRESS, USDT_ADDRESS, LOOKA_ABI, USDT_ABI } from "../contract";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -43,6 +43,15 @@ function App() {
   const [toast, setToast]         = useState(null);
 
   const { open } = useAppKit();
+
+  // Synchroniser le modal avec le thème OS
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    modal.setThemeMode(mq.matches ? "dark" : "light");
+    const handler = (e) => modal.setThemeMode(e.matches ? "dark" : "light");
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
   const { address, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
 
