@@ -1,4 +1,5 @@
 import { createAppKit } from "@reown/appkit";
+import { UniversalAccount } from "@particle-network/universal-account-sdk";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 
 export const projectId = "a76badfdf543ada7db3fe70ff41921cb";
@@ -62,4 +63,20 @@ if (typeof window !== "undefined") {
     .addEventListener("change", (e) => {
       modal.setThemeMode(e.matches ? "dark" : "light");
     });
+}
+
+
+// ─── Particle Network Universal Accounts ────────────────────────────────────
+
+export function createUniversalAccount(ownerAddress) {
+  return new UniversalAccount({
+    projectId: process.env.NEXT_PUBLIC_PARTICLE_PROJECT_ID,
+    projectClientKey: process.env.NEXT_PUBLIC_PARTICLE_CLIENT_KEY,
+    projectAppUuid: process.env.NEXT_PUBLIC_PARTICLE_APP_ID,
+    ownerAddress,
+    tradeConfig: {
+      slippageBps: 100,
+      universalGas: true,
+    },
+  });
 }

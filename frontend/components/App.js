@@ -5,7 +5,7 @@ import en from "../locales/en.json";
 import { useAppKit, useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
 import { WagmiProvider } from "wagmi";
 import { BrowserProvider, Contract, parseUnits } from "ethers";
-import { wagmiAdapter, modal } from "../walletconfig";
+import { wagmiAdapter, modal, createUniversalAccount } from "../walletconfig";
 import { createAppKit } from "@reown/appkit/react";
 import { LOOKA_ADDRESS, USDT_ADDRESS, LOOKA_ABI, USDT_ABI } from "../contract";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -125,12 +125,27 @@ function App() {
       const usdt = new Contract(USDT_ADDRESS, USDT_ABI, signer);
       const contract = new Contract(LOOKA_ADDRESS, LOOKA_ABI, signer);
       const total = parseUnits((quantity*2).toString(), 18);
+      const ref = getReferralAddress() || "0x0000000000000000000000000000000000000000";
+      const usdtBalance = await usdt.balanceOf(address);
+      if (usdtBalance < total) {
+        try {
+          const ua = createUniversalAccount(address);
+          const convertTx = await ua.createBuyTransaction({
+            token: { chainId: 56, address: USDT_ADDRESS },
+            amountInUSD: (quantity * 2).toString(),
+          });
+          await ua.sendTransaction(convertTx);
+          await new Promise(r => setTimeout(r, 4000));
+        } catch(uaErr) {
+          showToast(lang==="fr"?"Solde USDT insuffisant sur BSC":"Insufficient USDT balance on BSC", false);
+          setLoading(false); return;
+        }
+      }
       const allowance = await usdt.allowance(address, LOOKA_ADDRESS);
       if (allowance < total) {
         const tx = await usdt.approve(LOOKA_ADDRESS, total);
         await tx.wait();
       }
-      const ref = getReferralAddress() || "0x0000000000000000000000000000000000000000";
       const tx2 = await contract.buyTickets(quantity, ref);
       await tx2.wait();
       showToast(lang==="fr"?`${quantity} ticket(s) achetés !`:`${quantity} ticket(s) purchased!`);
