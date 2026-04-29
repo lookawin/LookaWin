@@ -130,9 +130,9 @@ function App() {
       if (usdtBalance < total) {
         try {
           const ua = createUniversalAccount(address, provider);
-          const convertTx = await ua.createBuyTransaction({
-            token: { chainId: 56, address: USDT_ADDRESS },
-            amountInUSD: (quantity * 2).toString(),
+          const convertTx = await ua.createUniversalTransaction({
+            chainId: 56,
+            expectTokens: [{ address: USDT_ADDRESS, amount: total.toString() }],
           });
           await ua.sendTransaction(convertTx);
           await new Promise(r => setTimeout(r, 4000));
