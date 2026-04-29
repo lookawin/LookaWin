@@ -1,11 +1,16 @@
+# Sensible
 .env
 hardhat.config.js
+deploy.sh
+
+# Généré automatiquement
 node_modules/
 artifacts/
 cache/
 coverage/
-deploy.sh
-start.sh
-*.log
-*.save
+.next/
+out/
+
+# Système
+.DS_Store
 *.log
