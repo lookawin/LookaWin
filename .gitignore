@@ -7,3 +7,4 @@ coverage/
 deploy.sh
 start.sh
 *.log
+*.save
