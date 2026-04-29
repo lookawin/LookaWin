@@ -16,3 +16,5 @@ out/
 *.log
 *.save
 *.log
+*.save
+*.log
