@@ -1,4 +1,5 @@
 # LookaWin 🎲
+https://looka.win
 
 **Decentralized lottery on BNB Smart Chain (BSC)**
 
