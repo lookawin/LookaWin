@@ -14,3 +14,5 @@ out/
 # Système
 .DS_Store
 *.log
+*.save
+*.log
