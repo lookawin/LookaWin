@@ -3,5 +3,8 @@ node_modules/
 artifacts/
 cache/
 coverage/
-typechain/
-deployments/local/
+frontend/
+scripts/
+test/
+deploy.sh
+start.sh
