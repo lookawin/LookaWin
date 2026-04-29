@@ -1,0 +1,89 @@
+const hre = require("hardhat");
+
+async function main() {
+  const [owner, player1, player2, player3] = await hre.ethers.getSigners();
+  console.log("=== TEST LOOKA LOTTERY ===\n");
+
+  // Déployer MockVRFCoordinator
+  const MockVRF = await hre.ethers.getContractFactory("MockVRFCoordinator");
+  const mockVRF = await MockVRF.deploy();
+  await mockVRF.waitForDeployment();
+  const vrfAddress = await mockVRF.getAddress();
+  console.log("MockVRF:", vrfAddress);
+
+  // Déployer MockUSDT
+  const MockUSDT = await hre.ethers.getContractFactory("MockUSDT");
+  const usdt = await MockUSDT.deploy();
+  await usdt.waitForDeployment();
+  const usdtAddress = await usdt.getAddress();
+  console.log("MockUSDT:", usdtAddress);
+
+  // Déployer LotteryV1
+  const Lottery = await hre.ethers.getContractFactory("LotteryV1");
+  const lottery = await Lottery.deploy(
+    usdtAddress, vrfAddress,
+    "0xd4bb89654db74673a187bd804519e65e3f71a52bc55f11da7601a13dcf505314",
+    1n
+  );
+  await lottery.waitForDeployment();
+  const lotteryAddress = await lottery.getAddress();
+  console.log("LotteryV1:", lotteryAddress);
+
+  // Mint et approuver USDT
+  await usdt.mint(player1.address, 1000n * 1000000n);
+  await usdt.mint(player2.address, 1000n * 1000000n);
+  await usdt.mint(player3.address, 1000n * 1000000n);
+  await usdt.connect(player1).approve(lotteryAddress, 1000n * 1000000n);
+  await usdt.connect(player2).approve(lotteryAddress, 1000n * 1000000n);
+  await usdt.connect(player3).approve(lotteryAddress, 1000n * 1000000n);
+  console.log("\n✅ USDT mintés et approuvés");
+
+  // Acheter tickets
+  await lottery.connect(player1).buyTickets(20n, hre.ethers.ZeroAddress);
+  await lottery.connect(player2).buyTickets(15n, player1.address);
+  await lottery.connect(player3).buyTickets(15n, player1.address);
+  console.log("✅ 50 tickets achetés");
+
+  // Afficher état
+  const prize = await lottery.getCurrentPrize();
+  const jackpots = await lottery.getJackpots();
+  console.log("\n=== ÉTAT ===");
+  console.log("Cagnotte horaire:", Number(prize) / 1e6, "USDT");
+  console.log("Jackpot journalier:", Number(jackpots[0]) / 1e6, "USDT");
+  console.log("Jackpot hebdo:", Number(jackpots[1]) / 1e6, "USDT");
+  console.log("Jackpot mensuel:", Number(jackpots[2]) / 1e6, "USDT");
+
+  // Modifier seuil à 10
+  await lottery.updateParams(10n, 5n * 1000000n);
+
+  // Tirage horaire
+  const tx = await lottery.requestHourlyDraw();
+  const receipt = await tx.wait();
+  let requestId;
+  for (const log of receipt.logs) {
+    try {
+      const parsed = lottery.interface.parseLog(log);
+      if (parsed.name === "DrawRequested") {
+        requestId = parsed.args[0];
+        console.log("\n🎲 Tirage demandé - requestId:", requestId.toString());
+      }
+    } catch {}
+  }
+
+  // Simuler réponse VRF
+  const randomWord = 42n;
+  await mockVRF.fulfillRandomWords(randomWord);
+  console.log("✅ VRF fulfillé avec randomWord:", randomWord.toString());
+
+  // Balances finales
+  const b1 = await usdt.balanceOf(player1.address);
+  const b2 = await usdt.balanceOf(player2.address);
+  const b3 = await usdt.balanceOf(player3.address);
+  console.log("\n=== BALANCES FINALES ===");
+  console.log("Player1:", Number(b1) / 1e6, "USDT");
+  console.log("Player2:", Number(b2) / 1e6, "USDT");
+  console.log("Player3:", Number(b3) / 1e6, "USDT");
+  console.log("\n=== TEST TERMINÉ AVEC SUCCÈS ✅ ===");
+}
+
+main().catch(console.error);

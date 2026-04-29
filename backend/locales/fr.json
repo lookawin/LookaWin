@@ -1,0 +1,24 @@
+{
+  "lottery": {
+    "title": "Looka - Loterie Crypto",
+    "buy_ticket": "Acheter un ticket",
+    "current_prize": "Cagnotte actuelle",
+    "next_draw": "Prochain tirage",
+    "participants": "Participants",
+    "jackpot_daily": "Jackpot Journalier",
+    "jackpot_weekly": "Jackpot Hebdomadaire",
+    "jackpot_monthly": "Jackpot Mensuel",
+    "winners": "Derniers gagnants",
+    "referral_link": "Mon lien de parrainage",
+    "referral_pending": "Gains parrainage en attente",
+    "draw_skipped": "Seuil non atteint - report au prochain tirage",
+    "draw_triggered": "Tirage en cours",
+    "threshold": "Seuil minimum",
+    "tickets_sold": "Tickets vendus"
+  },
+  "errors": {
+    "wallet_not_connected": "Veuillez connecter votre wallet",
+    "insufficient_balance": "Solde USDT insuffisant",
+    "transaction_failed": "Transaction échouée"
+  }
+}
