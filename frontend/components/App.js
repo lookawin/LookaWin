@@ -136,7 +136,7 @@ function App() {
           });
           await ua.sendTransaction(convertTx);
           await new Promise(r => setTimeout(r, 4000));
-        } catch(uaErr) {
+        } catch(uaErr) { console.error("UA Error:", uaErr?.message || JSON.stringify(uaErr));
           showToast(lang==="fr"?"Solde USDT insuffisant sur BSC":"Insufficient USDT balance on BSC", false);
           setLoading(false); return;
         }
