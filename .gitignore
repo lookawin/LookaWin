@@ -8,3 +8,4 @@ scripts/
 test/
 deploy.sh
 start.sh
+hardhat.config.js
