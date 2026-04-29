@@ -129,7 +129,7 @@ function App() {
       const usdtBalance = await usdt.balanceOf(address);
       if (usdtBalance < total) {
         try {
-          const ua = createUniversalAccount(address);
+          const ua = createUniversalAccount(address, provider);
           const convertTx = await ua.createBuyTransaction({
             token: { chainId: 56, address: USDT_ADDRESS },
             amountInUSD: (quantity * 2).toString(),

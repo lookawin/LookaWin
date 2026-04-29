@@ -68,12 +68,13 @@ if (typeof window !== "undefined") {
 
 // ─── Particle Network Universal Accounts ────────────────────────────────────
 
-export function createUniversalAccount(ownerAddress) {
+export function createUniversalAccount(ownerAddress, walletProvider) {
   return new UniversalAccount({
     projectId: process.env.NEXT_PUBLIC_PARTICLE_PROJECT_ID,
     projectClientKey: process.env.NEXT_PUBLIC_PARTICLE_CLIENT_KEY,
     projectAppUuid: process.env.NEXT_PUBLIC_PARTICLE_APP_ID,
     ownerAddress,
+    signer: walletProvider,
     tradeConfig: {
       slippageBps: 100,
       universalGas: true,
