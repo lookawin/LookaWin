@@ -362,7 +362,7 @@ function App() {
                 <div key={i} className="ticket-item">
                   <div>
                     <p className="ticket-round" style={{margin:0}}>
-                      <a href={"https://bscscan.com/tx/" + tk.txhash} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
+                      <a href={"https://bscscan.com/tx/" + (tk.txHash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
                         #{tk.block || tk.round}
                       </a>
                       {/* Debug: {JSON.stringify(tk)} */} · {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"}
