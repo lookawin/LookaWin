@@ -361,14 +361,11 @@ function App() {
               myTickets.map((tk,i)=>(
                 <div key={i} className="ticket-item">
                   <div>
-                    <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
-                      <p className="ticket-round" style={{margin:0}}>Bloc #{tk.block || tk.round} · {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"}</p>
-                      <p className="ticket-id" style={{margin:0}}>
-                        <a href={"https://bscscan.com/tx/" + (tk.txhash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none",fontWeight:"bold"}}>
-                          {(tk.txhash || tk.id || "").slice(0,8)}... ↗
-                        </a>
-                      </p>
-                    </div>
+                    <p className="ticket-round" style={{margin:0}}>
+                      <a href={"https://bscscan.com/tx/" + (tk.txhash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
+                        #{tk.block || tk.round}
+                      </a> · {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"}
+                    </p>
                   </div>
                   <span className={`ticket-status-${tk.status}`}>{tk.status}</span>
                 </div>
