@@ -316,17 +316,6 @@ function App() {
             {loading ? (lang==="fr"?"Transaction...":"Processing...") : (quantity===1?t("buy_ticket"):t("buy_tickets").replace("{{n}}",quantity))}
           </button>
         </div>
-        <div className="card a4">
-          <div className="ref-header">
-            <p className="card-label" style={{marginBottom:0}}>{t("referral_link")}</p>
-            <span className="ref-badge">3% / ticket</span>
-          </div>
-          <div className="ref-row">
-            <input readOnly className="ref-input" value={`${typeof window!=="undefined"?window.location.origin:"https://looka.win"}?ref=${address||"YOUR_ADDRESS"}`}/>
-            <button className="btn-copy" onClick={copyReferral}>{copied?(lang==="fr"?"Copié ✓":"Copied ✓"):t("referral_copy")}</button>
-          </div>
-        </div>
-
         <div className="card a5">
           <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
           <div className="tabs">
@@ -336,6 +325,17 @@ function App() {
             <button className={`tab ${historyTab==="mytickets"?"tab-on":"tab-off"}`} onClick={()=>setHistoryTab("mytickets")}>
               {lang==="fr"?"Mes Tickets":"My Tickets"}
             </button>
+          </div>
+          <div className="ref-row">
+            <input readOnly className="ref-input" value={`${typeof window!=="undefined"?window.location.origin:"https://looka.win"}?ref=${address||"YOUR_ADDRESS"}`}/>
+            <button className="btn-copy" onClick={copyReferral}>{copied?(lang==="fr"?"Copié ✓":"Copied ✓"):t("referral_copy")}</button>
+          </div>
+        </div>
+
+        <div className="card a4">
+          <div className="ref-header">
+            <p className="card-label" style={{marginBottom:0}}>{t("referral_link")}</p>
+            <span className="ref-badge">3% / ticket</span>
           </div>
           {historyTab==="winners" && (
             winners.length===0?(
@@ -372,8 +372,14 @@ function App() {
               myTickets.map((tk,i)=>(
                 <div key={i} className="ticket-item">
                   <div>
-                    <p className="ticket-round">{t("round")} #{tk.round}</p>
-                    <p className="ticket-id">#{tk.id}</p>
+                    <p className="ticket-round">{t("round")} #{tk.round}{tk.block ? ` — block #${tk.block}` : ""}</p>
+                    <p className="ticket-id">
+                      {tk.txhash ? (
+                        <a href={`https://bscscan.com/tx/${tk.txhash}`} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
+                          {tk.txhash.slice(0,6)}...{tk.txhash.slice(-4)} ↗
+                        </a>
+                      ) : `#${tk.id}`}
+                    </p>
                   </div>
                   <span className={`ticket-status-${tk.status}`}>{tk.status}</span>
                 </div>
