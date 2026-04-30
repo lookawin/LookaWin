@@ -5,5 +5,9 @@ const nextConfig = {
   trailingSlash: true,
   images: { unoptimized: true },
   assetPrefix: "/",
+  transpilePackages: [
+    "@particle-network/universal-deposit",
+    "@particle-network/auth-core-modal",
+  ],
 };
 module.exports = nextConfig;

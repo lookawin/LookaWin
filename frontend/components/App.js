@@ -8,6 +8,7 @@ import { BrowserProvider, Contract, parseUnits, Interface } from "ethers";
 import { wagmiAdapter, modal, createUniversalAccount } from "../walletconfig";
 import { createAppKit } from "@reown/appkit/react";
 import { LOOKA_ADDRESS, USDT_ADDRESS, LOOKA_ABI, USDT_ABI } from "../contract";
+import { useDeposit, DepositModal } from "@particle-network/universal-deposit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,8 @@ function App() {
   const [myTickets, setMyTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(false);
   const [loading, setLoading]     = useState(false);
+  const [depositOpen, setDepositOpen] = useState(false);
+  const { isReady: depositReady } = useDeposit({ ownerAddress: address || "" });
   const [toast, setToast]         = useState(null);
 
   const { open } = useAppKit();
@@ -314,6 +317,13 @@ function App() {
           <button className="btn-buy" onClick={buyTickets} disabled={loading}>
             {loading ? (lang==="fr"?"Transaction...":"Processing...") : (quantity===1?t("buy_ticket"):t("buy_tickets").replace("{{n}}",quantity))}
           </button>
+          <button
+            onClick={() => setDepositOpen(true)}
+            disabled={!depositReady}
+            style={{width:"100%",marginTop:"10px",padding:"12px",background:"transparent",border:"1px solid var(--purple)",borderRadius:"22px",color:"var(--purple)",fontFamily:"var(--font)",fontWeight:700,fontSize:"0.9rem",cursor:"pointer"}}>
+            {lang==="fr"?"💳 Déposer depuis une autre chaîne":"💳 Deposit from any chain"}
+          </button>
+          <DepositModal isOpen={depositOpen} onClose={() => setDepositOpen(false)} />
         </div>
         <div className="card a4">
           <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
