@@ -327,6 +327,60 @@ function App() {
           </div>
         </div>
 
+        <div className="card a5">
+          <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
+          <div className="tabs">
+            <button className={`tab ${historyTab==="winners"?"tab-on":"tab-off"}`} onClick={()=>setHistoryTab("winners")}>
+              {lang==="fr"?"Derniers Gagnants":"Latest Winners"}
+            </button>
+            <button className={`tab ${historyTab==="mytickets"?"tab-on":"tab-off"}`} onClick={()=>setHistoryTab("mytickets")}>
+              {lang==="fr"?"Mes Tickets":"My Tickets"}
+            </button>
+          </div>
+          {historyTab==="winners" && (
+            winners.length===0?(
+              <div style={{textAlign:"center",padding:"28px 0"}}>
+                <i className="fa-solid fa-ticket" style={{color:"#b48eef",fontSize:"1.9rem"}}></i>
+                <p style={{color:"var(--muted)",fontSize:"0.85rem"}}>{t("no_winners")}</p>
+              </div>
+            ):(
+              winners.map((w,i)=>(
+                <div key={i} className="winner-item">
+                  <div>
+                    <p className="winner-round">{t("round")} #{w.round}</p>
+                    <p className="winner-addr">{w.address.slice(0,6)}...{w.address.slice(-4)}</p>
+                  </div>
+                  <div>
+                    <p className="winner-amt">+{w.amount}</p>
+                    <p className="winner-unit">USDT</p>
+                  </div>
+                </div>
+              ))
+            )
+          )}
+          {historyTab==="mytickets" && (!isConnected ? (
+            <div style={{textAlign:"center",padding:"28px 0"}}>
+              <p style={{color:"var(--muted)",fontSize:"0.85rem"}}>{lang==="fr"?"Connectez votre wallet pour voir vos tickets":"Connect your wallet to see your tickets"}</p>
+            </div>
+          ):(
+            myTickets.length===0?(
+              <div style={{textAlign:"center",padding:"28px 0"}}>
+                <i className="fa-solid fa-ticket" style={{color:"#b48eef",fontSize:"1.9rem"}}></i>
+                <p style={{color:"var(--muted)",fontSize:"0.85rem"}}>{lang==="fr"?"Aucun ticket pour l'instant":"No tickets yet"}</p>
+              </div>
+            ):(
+              myTickets.map((tk,i)=>(
+                <div key={i} className="ticket-item">
+                  <div>
+                    <p className="ticket-round">{t("round")} #{tk.round}</p>
+                    <p className="ticket-id">#{tk.id}</p>
+                  </div>
+                  <span className={`ticket-status-${tk.status}`}>{tk.status}</span>
+                </div>
+              ))
+            )
+          ))}
+        </div>
       </main>
 
       <footer className="footer">
