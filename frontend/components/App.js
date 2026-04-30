@@ -41,7 +41,6 @@ function App() {
   const [myTickets, setMyTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(false);
   const [loading, setLoading]     = useState(false);
-  const { isReady: depositReady } = useDeposit({ ownerAddress: address || "" });
   const [toast, setToast]         = useState(null);
 
   const { open } = useAppKit();
@@ -316,94 +315,15 @@ function App() {
           <button className="btn-buy" onClick={buyTickets} disabled={loading}>
             {loading ? (lang==="fr"?"Transaction...":"Processing...") : (quantity===1?t("buy_ticket"):t("buy_tickets").replace("{{n}}",quantity))}
           </button>
-          <button
-            onClick={() => setDepositOpen(true)}
-            disabled={!depositReady}
-            style={{width:"100%",marginTop:"10px",padding:"12px",background:"transparent",border:"1px solid var(--purple)",borderRadius:"22px",color:"var(--purple)",fontFamily:"var(--font)",fontWeight:700,fontSize:"0.9rem",cursor:"pointer"}}>
-            {lang==="fr"?"💳 Déposer depuis une autre chaîne":"💳 Deposit from any chain"}
-          </button>
         </div>
         <div className="card a4">
-          <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
-          <div className="tabs">
-            <button className={`tab ${historyTab==="winners"?"tab-on":"tab-off"}`} onClick={()=>setHistoryTab("winners")}>
-              {lang==="fr"?"Derniers Gagnants":"Latest Winners"}
-            </button>
-            <button className={`tab ${historyTab==="mytickets"?"tab-on":"tab-off"}`} onClick={()=>setHistoryTab("mytickets")}>
-              {lang==="fr"?"Mes Tickets":"My Tickets"}
-            </button>
-          </div>
-          {historyTab==="mytickets" && (!isConnected ? (
-            <div style={{textAlign:"center",padding:"18px 0"}}>
-              <i className="fa-solid fa-wallet" style={{color:"#b48eef",fontSize:"1.9rem",marginBottom:"10px",display:"block"}}></i>
-              <p style={{color:"var(--muted)",fontSize:"0.85rem",marginBottom:"12px"}}>
-                {lang==="fr"?"Connectez votre wallet pour voir vos tickets":"Connect your wallet to see your tickets"}
-              </p>
-              <button className="btn-connect-wallet" onClick={()=>open()}>{t("connect_wallet")}</button>
-            </div>
-          ) : loadingTickets ? (
-            <div style={{textAlign:"center",padding:"20px 0",color:"var(--muted)",fontSize:"0.85rem"}}>
-              {lang==="fr"?"Chargement...":"Loading..."}
-            </div>
-          ) : myTickets.length===0 ? (
-            <div style={{textAlign:"center",padding:"20px 0"}}>
-              <i className="fa-solid fa-ticket" style={{color:"#b48eef",fontSize:"1.9rem",marginBottom:"10px",display:"block"}}></i>
-              <p style={{color:"var(--muted)",fontSize:"0.85rem"}}>
-                {lang==="fr"?"Vous n'avez pas encore de tickets":"You don't have any tickets yet"}
-              </p>
-            </div>
-          ) : (
-            myTickets.map((tk,i)=>(
-              <div key={i} className="ticket-item" style={{flexDirection:"column",alignItems:"flex-start",gap:6}}>
-                <div style={{display:"flex",justifyContent:"space-between",width:"100%",alignItems:"center"}}>
-                  <div>
-                    <p className="ticket-round" style={{marginBottom:2}}>
-                      {lang==="fr"?"Bloc":"Block"} #{tk.block||"—"} &bull; {tk.quantity||1} ticket{tk.quantity>1?"s":""}
-                    </p>
-                    {tk.txHash
-                      ? <a href={`https://bscscan.com/tx/${tk.txHash}`} target="_blank" rel="noopener noreferrer"
-                          className="ticket-id" style={{textDecoration:"none",display:"flex",alignItems:"center",gap:4}}>
-                          {tk.id||"—"}
-                          <i className="fa-solid fa-arrow-up-right-from-square" style={{fontSize:"0.6rem",opacity:0.6}}></i>
-                        </a>
-                      : <p className="ticket-id">{tk.id||"—"}</p>
-                    }
-                  </div>
-                  <span className={`ticket-status-${tk.status||"active"}`}>
-                    {tk.status==="won"?(lang==="fr"?"Gagné 🎉":"Won 🎉"):tk.status==="lost"?(lang==="fr"?"Terminé":"Ended"):(lang==="fr"?"Actif":"Active")}
-                  </span>
-                </div>
-              </div>
-            ))
-          ))}
-          {historyTab==="winners" && (winners.length===0 ? (
-            <div style={{textAlign:"center",padding:"28px 0"}}>
-              <i className="fa-solid fa-trophy" style={{color:"#b48eef",fontSize:"1.9rem"}}></i>
-              <p style={{color:"var(--muted)",fontSize:"0.85rem",marginTop:8}}>{t("no_winners")}</p>
-            </div>
-          ) : (
-            winners.map((w,i)=>(
-              <div key={i} className="winner-item">
-                <div>
-                  <p className="winner-round">{t("round")} #{w.round}</p>
-                  <p className="winner-addr">{w.address.slice(0,6)}...{w.address.slice(-4)}</p>
-                </div>
-                <div>
-                  <p className="winner-amt">+${w.amount}</p>
-                  <p className="winner-unit">USDT</p>
-                </div>
-              </div>
-            ))
-          ))}
-        </div>
-        <div className="card a5">
           <div className="ref-header">
             <p className="card-label" style={{marginBottom:0}}>{t("referral_link")}</p>
             <span className="ref-badge">3% / ticket</span>
           </div>
           <div className="ref-row">
             <input readOnly className="ref-input" value={`${typeof window!=="undefined"?window.location.origin:"https://looka.win"}?ref=${address||"YOUR_ADDRESS"}`}/>
-            <button className="btn-copy" onClick={copyReferral}>{copied?(lang==="fr"?"Copié":"Copied"):t("referral_copy")}</button>
+            <button className="btn-copy" onClick={copyReferral}>{copied?(lang==="fr"?"Copié ✓":"Copied ✓"):t("referral_copy")}</button>
           </div>
         </div>
 
