@@ -6,6 +6,7 @@ import { useAppKit, useAppKitAccount, useAppKitProvider } from "@reown/appkit/re
 import { WagmiProvider } from "wagmi";
 import { createAppKit } from "@reown/appkit/react";
 import { LOOKA_ADDRESS, USDT_ADDRESS, LOOKA_ABI, USDT_ABI } from "../contract";
+import dynamic from "next/dynamic";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -123,6 +124,7 @@ function App() {
       const usdt = new Contract(USDT_ADDRESS, USDT_ABI, signer);
       const contract = new Contract(LOOKA_ADDRESS, LOOKA_ABI, signer);
       const total = parseUnits((quantity*2).toString(), 18);
+      const ref = getReferralAddress() || "0x0000000000000000000000000000000000000000";
       const usdtBalance = await usdt.balanceOf(address);
       if (usdtBalance < total) {
         showToast(lang==="fr"?"Solde USDT insuffisant sur BSC":"Insufficient USDT balance on BSC", false);
@@ -134,10 +136,9 @@ function App() {
         const tx = await usdt.approve(LOOKA_ADDRESS, total);
         await tx.wait();
       }
-      const ref = getReferralAddress() || "0x0000000000000000000000000000000000000000";
       const tx2 = await contract.buyTickets(quantity, ref);
       await tx2.wait();
-      showToast(lang==="fr" ? `${quantity} ticket(s) achetés !` : `${quantity} ticket(s) purchased!`);
+      showToast(lang==="fr"?`${quantity} ticket(s) achetés !`:`${quantity} ticket(s) purchased!`);
       fetchState(); fetchMyTickets();
     } catch(e) {
       showToast(e?.reason || e?.message || "Error", false);
