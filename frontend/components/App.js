@@ -8,9 +8,7 @@ import { BrowserProvider, Contract, parseUnits, Interface } from "ethers";
 import { wagmiAdapter, modal, createUniversalAccount } from "../walletconfig";
 import { createAppKit } from "@reown/appkit/react";
 import { LOOKA_ADDRESS, USDT_ADDRESS, LOOKA_ABI, USDT_ABI } from "../contract";
-import { useDeposit } from "@particle-network/universal-deposit/react";
 import dynamic from "next/dynamic";
-const DepositModal = dynamic(() => import("@particle-network/universal-deposit/react").then(m => m.DepositModal), { ssr: false });
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -43,7 +41,6 @@ function App() {
   const [myTickets, setMyTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(false);
   const [loading, setLoading]     = useState(false);
-  const [depositOpen, setDepositOpen] = useState(false);
   const { isReady: depositReady } = useDeposit({ ownerAddress: address || "" });
   const [toast, setToast]         = useState(null);
 
@@ -133,9 +130,21 @@ function App() {
       const ref = getReferralAddress() || "0x0000000000000000000000000000000000000000";
       const usdtBalance = await usdt.balanceOf(address);
       if (usdtBalance < total) {
-        setDepositOpen(true);
-        setLoading(false);
-        return;
+        try {
+          const ua = createUniversalAccount(address, provider);
+          const iface = new Interface(USDT_ABI);
+          const approveData = iface.encodeFunctionData("approve", [LOOKA_ADDRESS, total]);
+          const convertTx = await ua.createUniversalTransaction({
+            chainId: 56,
+            transactions: [{ to: USDT_ADDRESS, data: approveData, value: "0x0" }],
+            expectTokens: [{ type: USDT_ADDRESS, amount: (quantity * 2).toString() }],
+          });
+          await ua.sendTransaction(convertTx);
+          await new Promise(r => setTimeout(r, 4000));
+        } catch(uaErr) { console.error("UA Error:", uaErr?.message || JSON.stringify(uaErr));
+          showToast(lang==="fr"?"Solde USDT insuffisant sur BSC":"Insufficient USDT balance on BSC", false);
+          setLoading(false); return;
+        }
       }
       const allowance = await usdt.allowance(address, LOOKA_ADDRESS);
       if (allowance < total) {
@@ -313,7 +322,6 @@ function App() {
             style={{width:"100%",marginTop:"10px",padding:"12px",background:"transparent",border:"1px solid var(--purple)",borderRadius:"22px",color:"var(--purple)",fontFamily:"var(--font)",fontWeight:700,fontSize:"0.9rem",cursor:"pointer"}}>
             {lang==="fr"?"💳 Déposer depuis une autre chaîne":"💳 Deposit from any chain"}
           </button>
-          <DepositModal isOpen={depositOpen} onClose={() => setDepositOpen(false)} />
         </div>
         <div className="card a4">
           <p className="card-label">{lang==="fr"?"Historique":"History"}</p>
