@@ -361,13 +361,14 @@ function App() {
               myTickets.map((tk,i)=>(
                 <div key={i} className="ticket-item">
                   <div>
-                    <p className="ticket-round">Bloc #{tk.block || tk.round}</p>
-                    <p className="ticket-id">
-                      {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"} · 
-                      <a href={"https://bscscan.com/tx/" + (tk.txhash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none",fontWeight:"bold"}}>
-                        {(tk.txhash || tk.id || "").slice(0,8)}... ↗
-                      </a>
-                    </p>
+                    <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
+                      <p className="ticket-round" style={{margin:0}}>Bloc #{tk.block || tk.round} · {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"}</p>
+                      <p className="ticket-id" style={{margin:0}}>
+                        <a href={"https://bscscan.com/tx/" + (tk.txhash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none",fontWeight:"bold"}}>
+                          {(tk.txhash || tk.id || "").slice(0,8)}... ↗
+                        </a>
+                      </p>
+                    </div>
                   </div>
                   <span className={`ticket-status-${tk.status}`}>{tk.status}</span>
                 </div>
