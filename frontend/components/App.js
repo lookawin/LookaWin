@@ -361,7 +361,7 @@ function App() {
               myTickets.map((tk,i)=>(
                 <div key={i} className="ticket-item">
                   <div>
-                    <p className="ticket-round" style={{margin:0, fontSize:"0.68rem"}}>
+                    <p className="ticket-round" style={{margin:0}}>
                       <a href={"https://bscscan.com/tx/" + (tk.txHash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none", fontWeight:"bold"}}>
                         #{tk.block || tk.round}
                       </a>
