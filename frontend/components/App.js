@@ -133,21 +133,9 @@ function App() {
       const ref = getReferralAddress() || "0x0000000000000000000000000000000000000000";
       const usdtBalance = await usdt.balanceOf(address);
       if (usdtBalance < total) {
-        try {
-          const ua = createUniversalAccount(address, provider);
-          const iface = new Interface(USDT_ABI);
-          const approveData = iface.encodeFunctionData("approve", [LOOKA_ADDRESS, total]);
-          const convertTx = await ua.createUniversalTransaction({
-            chainId: 56,
-            transactions: [{ to: USDT_ADDRESS, data: approveData, value: "0x0" }],
-            expectTokens: [{ type: USDT_ADDRESS, amount: (quantity * 2).toString() }],
-          });
-          await ua.sendTransaction(convertTx);
-          await new Promise(r => setTimeout(r, 4000));
-        } catch(uaErr) { console.error("UA Error:", uaErr?.message || JSON.stringify(uaErr));
-          showToast(lang==="fr"?"Solde USDT insuffisant sur BSC":"Insufficient USDT balance on BSC", false);
-          setLoading(false); return;
-        }
+        setDepositOpen(true);
+        setLoading(false);
+        return;
       }
       const allowance = await usdt.allowance(address, LOOKA_ADDRESS);
       if (allowance < total) {
