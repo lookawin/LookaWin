@@ -326,17 +326,6 @@ function App() {
               {lang==="fr"?"Mes Tickets":"My Tickets"}
             </button>
           </div>
-          <div className="ref-row">
-            <input readOnly className="ref-input" value={`${typeof window!=="undefined"?window.location.origin:"https://looka.win"}?ref=${address||"YOUR_ADDRESS"}`}/>
-            <button className="btn-copy" onClick={copyReferral}>{copied?(lang==="fr"?"Copié ✓":"Copied ✓"):t("referral_copy")}</button>
-          </div>
-        </div>
-
-        <div className="card a4">
-          <div className="ref-header">
-            <p className="card-label" style={{marginBottom:0}}>{t("referral_link")}</p>
-            <span className="ref-badge">3% / ticket</span>
-          </div>
           {historyTab==="winners" && (
             winners.length===0?(
               <div style={{textAlign:"center",padding:"28px 0"}}>
@@ -386,6 +375,17 @@ function App() {
               ))
             )
           ))}
+        </div>
+
+        <div className="card a4">
+          <div className="ref-header">
+            <p className="card-label" style={{marginBottom:0}}>{t("referral_link")}</p>
+            <span className="ref-badge">3% / ticket</span>
+          </div>
+          <div className="ref-row">
+            <input readOnly className="ref-input" value={`${typeof window!=="undefined"?window.location.origin:"https://looka.win"}?ref=${address||"YOUR_ADDRESS"}`}/>
+            <button className="btn-copy" onClick={copyReferral}>{copied?(lang==="fr"?"Copié ✓":"Copied ✓"):t("referral_copy")}</button>
+          </div>
         </div>
       </main>
 
