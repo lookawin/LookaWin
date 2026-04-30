@@ -8,7 +8,9 @@ import { BrowserProvider, Contract, parseUnits, Interface } from "ethers";
 import { wagmiAdapter, modal, createUniversalAccount } from "../walletconfig";
 import { createAppKit } from "@reown/appkit/react";
 import { LOOKA_ADDRESS, USDT_ADDRESS, LOOKA_ABI, USDT_ABI } from "../contract";
-import { useDeposit, DepositModal } from "@particle-network/universal-deposit/react";
+import { useDeposit } from "@particle-network/universal-deposit/react";
+import dynamic from "next/dynamic";
+const DepositModal = dynamic(() => import("@particle-network/universal-deposit/react").then(m => m.DepositModal), { ssr: false });
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
