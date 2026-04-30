@@ -222,7 +222,7 @@ function App() {
         .btn-copy { padding:10px 15px; background:var(--purple); border:none; border-radius:22px; color:#fff; font-family:var(--font); font-weight:700; font-size:0.8rem; cursor:pointer; white-space:nowrap; transition:background 0.15s; }
         .btn-copy:hover { background:var(--purple2); }
         .ticket-item { display:flex; justify-content:space-between; align-items:center; padding:10px 13px; background:var(--surface2); border:1px solid var(--border); border-radius:22px; margin-bottom:6px; }
-        .ticket-id { font-family:var(--font); font-weight:700; font-size:0.88rem; color:var(--purple); }
+                    <p className="ticket-id">
         .ticket-round { font-size:0.7rem; color:var(--muted); margin-bottom:2px; }
         .ticket-status-active { background:rgba(180,142,239,0.15); color:var(--purple); border-radius:8px; padding:3px 9px; font-size:0.68rem; font-weight:700; }
         .ticket-status-won { background:rgba(63,214,138,0.15); color:var(--green); border-radius:8px; padding:3px 9px; font-size:0.68rem; font-weight:700; }
@@ -361,13 +361,10 @@ function App() {
               myTickets.map((tk,i)=>(
                 <div key={i} className="ticket-item">
                   <div>
-                    <p className="ticket-round">{t("round")} #{tk.round}{tk.block ? ` — block #${tk.block}` : ""}</p>
+                    <p className="ticket-round">Bloc #{tk.block || tk.round}</p>
                     <p className="ticket-id">
-                      {tk.txhash ? (
-                        <a href={`https://bscscan.com/tx/${tk.txhash}`} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
-                          {tk.txhash.slice(0,6)}...{tk.txhash.slice(-4)} ↗
-                        </a>
-                      ) : `#${tk.id}`}
+                      {tk.count ? `${tk.count} ticket${tk.count>1?"s":""}` : "1 ticket"}
+                      {tk.txhash && (<span> · <a href={"https://bscscan.com/tx/"+tk.txhash} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"underline",cursor:"pointer"}}>{tk.txhash.slice(0,6)}...{tk.txhash.slice(-4)} ↗</a></span>)}
                     </p>
                   </div>
                   <span className={`ticket-status-${tk.status}`}>{tk.status}</span>
