@@ -361,8 +361,8 @@ function App() {
               myTickets.map((tk,i)=>(
                 <div key={i} className="ticket-item">
                   <div>
-                    <p className="ticket-round" style={{margin:0, fontSize:"0.68rem"}}>
-                      <a href={"https://bscscan.com/tx/" + (tk.txHash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none", fontWeight:"bold"}}>
+                    <p className="ticket-round" style={{margin:0}}>
+                      <a href={"https://bscscan.com/tx/" + (tk.txHash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
                         #{tk.block || tk.round}
                       </a>
                       {/* Debug: {JSON.stringify(tk)} */} · {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"}
