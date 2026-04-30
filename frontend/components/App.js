@@ -363,8 +363,9 @@ function App() {
                   <div>
                     <p className="ticket-round">Bloc #{tk.block || tk.round}</p>
                     <p className="ticket-id">
-                      <a href={"https://bscscan.com/tx/" + (tk.txhash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
-                        {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"} · {(tk.txhash || tk.id || "").slice(0,8)}... ↗
+                      {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"} · 
+                      <a href={"https://bscscan.com/tx/" + (tk.txhash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none",fontWeight:"bold"}}>
+                        {(tk.txhash || tk.id || "").slice(0,8)}... ↗
                       </a>
                     </p>
                   </div>
