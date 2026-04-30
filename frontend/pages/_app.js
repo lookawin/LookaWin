@@ -3,7 +3,7 @@ import { wagmiAdapter, modal } from "../walletconfig";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
-if (modal) void modal;
+void modal;
 const queryClient = new QueryClient();
 class ErrorBoundary extends React.Component {
   constructor(props) { super(props); this.state = { error: null }; }

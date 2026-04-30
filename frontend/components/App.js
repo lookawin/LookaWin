@@ -4,8 +4,11 @@ import fr from "../locales/fr.json";
 import en from "../locales/en.json";
 import { useAppKit, useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
 import { WagmiProvider } from "wagmi";
+import { BrowserProvider, Contract, parseUnits, Interface } from "ethers";
+import { wagmiAdapter, modal, createUniversalAccount } from "../walletconfig";
 import { createAppKit } from "@reown/appkit/react";
 import { LOOKA_ADDRESS, USDT_ADDRESS, LOOKA_ABI, USDT_ABI } from "../contract";
+import dynamic from "next/dynamic";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
