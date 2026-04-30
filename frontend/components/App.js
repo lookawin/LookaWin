@@ -364,7 +364,8 @@ function App() {
                     <p className="ticket-round" style={{margin:0}}>
                       <a href={"https://bscscan.com/tx/" + (tk.txhash || tk.id)} target="_blank" rel="noopener noreferrer" style={{color:"var(--purple)",textDecoration:"none"}}>
                         #{tk.block || tk.round}
-                      </a> · {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"}
+                      </a>
+                      {/* Debug: {JSON.stringify(tk)} */} · {tk.quantity ? `${tk.quantity} ticket${tk.quantity>1?"s":""}` : "1 ticket"}
                     </p>
                   </div>
                   <span className={`ticket-status-${tk.status}`}>{tk.status}</span>
